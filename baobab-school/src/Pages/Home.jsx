@@ -1,68 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import AnimatedPage from '../components/Common/AnimatedPage'; 
 
 const Home = () => {
-    // 1. Better State Init: Checks local storage immediately
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        return localStorage.getItem('color-theme') === 'dark' || 
-               (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    });
-
-    // 2. Sync theme class
-    useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [isDarkMode]);
-
-    const toggleTheme = () => {
-        const nextTheme = !isDarkMode;
-        setIsDarkMode(nextTheme);
-        localStorage.setItem('color-theme', nextTheme ? 'dark' : 'light');
-    };
+    // For testing, we point to a specific student ID from your students.js
+    const demoStudentId = "amos-01"; 
 
     return (
         <AnimatedPage>
-            {/* Main Wrapper */}
             <div className="bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-300 min-h-screen font-sans">
                 
-                {/* NOTE: I suggest moving this <nav> to a separate Navbar.jsx component 
-                   so your Dashboard and Lab pages also have navigation!
-                */}
-                <nav className="border-b border-gray-100 dark:border-slate-800 py-6 px-8 lg:px-20 flex justify-between items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-                    <div className="flex flex-col">
-                        <Link to="/" className="text-2xl tracking-tighter text-[#701c1c] dark:text-[#ff4d4d] font-black uppercase leading-none font-serif">
-                            Baobab
-                        </Link>
-                        <span className="text-[10px] uppercase tracking-widest font-light text-gray-500 dark:text-slate-400">School of Computing</span>
-                    </div>
-
-                    <div className="flex items-center space-x-6 md:space-x-8">
-                        <div className="hidden md:flex space-x-6 text-[11px] font-bold uppercase tracking-widest text-gray-600 dark:text-slate-300">
-                            <Link to="/campus" className="hover:text-[#701c1c] transition">Campus</Link>
-                            <Link to="/lab" className="hover:text-[#701c1c] transition">The Lab</Link>
-                        </div>
-
-                        <Link to="/dashboard" className="flex items-center space-x-3 group cursor-pointer">
-                            <div className="text-right hidden sm:block">
-                                <p className="text-[9px] font-black uppercase tracking-tighter leading-none dark:text-white">Amos Omari</p>
-                                <p className="text-[8px] text-[#701c1c] dark:text-[#ff4d4d] font-bold uppercase tracking-widest">Level 4</p>
-                            </div>
-                            <div className="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 flex items-center justify-center group-hover:border-[#701c1c] transition-all">
-                                <span className="text-xs">🌳</span>
-                            </div>
-                        </Link>
-
-                        <button onClick={toggleTheme} className="p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-800 transition-all text-sm">
-                            {isDarkMode ? '☀️' : '🌙'}
-                        </button>
-                    </div>
-                </nav>
-
-                {/* Hero */}
+                {/* Hero Header */}
                 <header className="max-w-6xl mx-auto px-8 lg:px-20 py-24">
                     <div className="max-w-3xl">
                         <p className="uppercase tracking-[0.3em] text-[10px] font-bold text-gray-400 dark:text-slate-500 mb-4">Nairobi, Kenya</p>
@@ -73,13 +21,17 @@ const Home = () => {
                             An elite online code lab. We offer a rigorous foundation in software architecture, low-level systems, and automated workflows.
                         </p>
                         <div className="flex items-center space-x-6">
-                            <button className="bg-[#701c1c] text-white px-8 py-4 font-bold text-xs uppercase tracking-widest shadow-lg hover:opacity-90 transition">Explore Tracks</button>
-                            <button className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-slate-400 border-b border-transparent hover:border-gray-400 transition">Speak to an Advisor</button>
+                            <button className="bg-[#701c1c] text-white px-8 py-4 font-bold text-xs uppercase tracking-widest shadow-lg hover:opacity-90 transition">
+                                Explore Tracks
+                            </button>
+                            <button className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-slate-400 border-b border-transparent hover:border-gray-400 transition">
+                                Speak to an Advisor
+                            </button>
                         </div>
                     </div>
                 </header>
 
-                {/* Mission Card */}
+                {/* Progress Bar Mission Card */}
                 <section className="max-w-6xl mx-auto px-8 lg:px-20 -mt-10 relative z-10">
                     <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex items-center space-x-4">
@@ -100,20 +52,33 @@ const Home = () => {
                             </div>
                         </div>
 
-                        <Link to="/dashboard" className="text-[10px] text-center font-black uppercase tracking-widest bg-gray-900 dark:bg-white dark:text-black text-white px-6 py-3 rounded-lg hover:scale-105 transition">
+                        {/* FIXED LINK: Now points to a dynamic ID */}
+                        <Link to={`/dashboard/${demoStudentId}`} className="text-[10px] text-center font-black uppercase tracking-widest bg-gray-900 dark:bg-white dark:text-black text-white px-6 py-3 rounded-lg hover:scale-105 transition">
                             Go to My Dashboard
                         </Link>
                     </div>
                 </section>
 
-                {/* Departments */}
+                {/* Department Grid */}
                 <section id="departments" className="py-24 px-8 lg:px-20 bg-gray-50 dark:bg-slate-900/50 border-y border-gray-100 dark:border-slate-800 mt-20">
                     <div className="max-w-7xl mx-auto">
                         <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-16">Academic Departments</h3>
                         <div className="grid md:grid-cols-3 gap-8">
-                            <DepartmentCard title="Front-End Architecture" desc="Designing performant, user-centric visual systems for the modern web." accent="bg-[#701c1c]" />
-                            <DepartmentCard title="Systems Programming" desc="Mastering memory management and hardware logic via ANSI C." accent="bg-black dark:bg-white" />
-                            <DepartmentCard title="Applied Scripting" desc="Automating complex workflows with Python and Unix Bash." accent="bg-gray-300 dark:bg-slate-600" />
+                            <DepartmentCard 
+                                title="Front-End Architecture" 
+                                desc="Designing performant, user-centric visual systems for the modern web." 
+                                accent="bg-[#701c1c]" 
+                            />
+                            <DepartmentCard 
+                                title="Systems Programming" 
+                                desc="Mastering memory management and hardware logic via ANSI C." 
+                                accent="bg-black dark:bg-white" 
+                            />
+                            <DepartmentCard 
+                                title="Applied Scripting" 
+                                desc="Automating complex workflows with Python and Unix Bash." 
+                                accent="bg-gray-300 dark:bg-slate-600" 
+                            />
                         </div>
                     </div>
                 </section>
@@ -130,7 +95,6 @@ const Home = () => {
     );
 };
 
-// Reusable Sub-component
 const DepartmentCard = ({ title, desc, accent }) => (
     <div className="bg-white dark:bg-slate-800 p-10 border border-gray-200 dark:border-slate-700 hover:shadow-2xl transition-all group cursor-pointer">
         <div className={`w-10 h-1 ${accent} mb-6 group-hover:w-full transition-all duration-500`}></div>

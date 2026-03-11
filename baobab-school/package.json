@@ -3,15 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Nairobi's elite digital laboratory for software architecture.",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "init-tail": "tailwindcss init -p"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "framer-motion": "^12.35.2",
+    "lucide-react": "^0.577.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.1",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -29,5 +37,8 @@
   },
   "overrides": {
     "vite": "^8.0.0-beta.13"
-  }
+  },
+  "keywords": [],
+  "author": "Baobab Engineer",
+  "license": "ISC"
 }

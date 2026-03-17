@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AnimatedPage from '../components/Common/AnimatedPage'; 
+import AnimatedPage from '../Components/AnimatedPage.jsx'; 
 
 const Home = () => {
     // For testing, we point to a specific student ID from your students.js

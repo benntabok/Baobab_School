@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AnimatedPage from '../components/Common/AnimatedPage';
+import AnimatedPage from '../Components/AnimatedPage.jsx';
 import { Terminal, Play, Save, Settings, ChevronRight, Cpu, Layers, HardDrive } from 'lucide-react';
 
 const Lab = () => {

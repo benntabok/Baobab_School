@@ -1,19 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: 'class', // Ensure this is set for your dark:bg-slate-950 classes
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: 'media', // Use 'media' to match your system settings or 'class' for a manual toggle
   theme: {
     extend: {
       colors: {
-        baobab: {
-          deep: '#701c1c',
-          glow: '#ff4d4d',
-        },
-      },
-      fontFamily: {
-        // Baobab looks best with a strong Serif for headings
-        serif: ['"Playfair Display"', 'serif'], 
-        sans: ['Inter', 'sans-serif'],
+        crimson: '#701c1c',
+        'crimson-light': '#ff4d4d',
       },
     },
   },

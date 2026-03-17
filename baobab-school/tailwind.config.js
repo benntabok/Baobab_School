@@ -4,12 +4,17 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'media', // Use 'media' to match your system settings or 'class' for a manual toggle
+  darkMode: 'class', // 👈 Change this to 'class' for manual control
   theme: {
     extend: {
       colors: {
-        crimson: '#701c1c',
-        'crimson-light': '#ff4d4d',
+        // Renaming to match the "Baobab" aesthetic
+        baobab: {
+          crimson: '#701c1c', // Your classic brand color
+          glow: '#ff4d4d',    // The Cyber-Red for dark mode
+          dark: '#0a0f1d',    // The deep midnight background
+          card: '#111827',    // Slightly lighter card background
+        },
       },
     },
   },

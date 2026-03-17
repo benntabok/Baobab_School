@@ -1,42 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import useAuthStore from '../Store/useAuthStore'; // Use the global store
-import { LogOut, Sun, Moon } from 'lucide-react'; // Clean icons
+import useAuthStore from '../Store/useAuthStore'; // Corrected Case: Ensure path matches Store/useAuthStore
+import { LogOut, Sun, Moon } from 'lucide-react';
 
 const Navbar = () => {
-    // 1. Pull the real authenticated user from the store
-    const { user, logout, isAuthenticated } = useAuthStore((state) => state);
-    
-    // 2. State for Dark Mode
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        return localStorage.getItem('color-theme') === 'dark' || 
-               (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    });
+    // 1. Pull everything from the global store
+    const { user, logout, isAuthenticated, theme, toggleTheme } = useAuthStore((state) => state);
 
-    useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [isDarkMode]);
-
-    const toggleTheme = () => {
-        const nextTheme = !isDarkMode;
-        setIsDarkMode(nextTheme);
-        localStorage.setItem('color-theme', nextTheme ? 'dark' : 'light');
-    };
-
-    // If not logged in, we only show the Logo and a Login link
+    // If not logged in, show simplified branding
     if (!isAuthenticated) {
         return (
             <nav className="border-b border-gray-100 dark:border-slate-800 py-6 px-8 lg:px-20 flex justify-between items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
                 <Link to="/" className="text-2xl tracking-tighter text-[#701c1c] dark:text-[#ff4d4d] font-black uppercase leading-none font-serif">
                     Baobab
                 </Link>
-                <Link to="/login" className="text-[11px] font-bold uppercase tracking-widest text-gray-600 dark:text-slate-300 hover:text-[#701c1c]">
-                    Initialize Session
-                </Link>
+                <div className="flex items-center space-x-6">
+                    <button onClick={toggleTheme} className="p-2 text-gray-500 dark:text-slate-400 hover:text-[#701c1c] dark:hover:text-[#ff4d4d] transition-all">
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
+                    <Link to="/login" className="text-[11px] font-bold uppercase tracking-widest text-gray-600 dark:text-slate-300 hover:text-[#701c1c]">
+                        Initialize Session
+                    </Link>
+                </div>
             </nav>
         );
     }
@@ -59,7 +44,7 @@ const Navbar = () => {
                     <Link to="/lab" className="hover:text-[#701c1c] dark:hover:text-[#ff4d4d] transition">The Lab</Link>
                 </div>
 
-                {/* Profile Section - Uses dynamic data from Auth Store */}
+                {/* Profile Section - Linked to current user node */}
                 <Link to={`/dashboard/${user?.id}`} className="flex items-center space-x-3 group cursor-pointer">
                     <div className="text-right hidden sm:block">
                         <p className="text-[9px] font-black uppercase tracking-tighter leading-none dark:text-white">
@@ -76,10 +61,10 @@ const Navbar = () => {
 
                 {/* Utility Actions */}
                 <div className="flex items-center space-x-2 border-l border-gray-200 dark:border-slate-800 pl-6">
-                    <button onClick={toggleTheme} className="p-2 text-gray-500 hover:text-[#701c1c] transition-all">
-                        {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                    <button onClick={toggleTheme} className="p-2 text-gray-500 hover:text-[#701c1c] dark:hover:text-[#ff4d4d] transition-all" title="Toggle Neural Theme">
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </button>
-                    <button onClick={logout} className="p-2 text-gray-400 hover:text-red-600 transition-all" title="Logout">
+                    <button onClick={logout} className="p-2 text-gray-400 hover:text-red-600 transition-all" title="Terminate Session">
                         <LogOut size={18} />
                     </button>
                 </div>

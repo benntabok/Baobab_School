@@ -4,6 +4,7 @@ import { students } from '../Data/students';
 import useAuthStore from '../Store/useAuthStore';
 import AnimatedPage from '../Components/AnimatedPage';
 import { LayoutGrid, Activity, Terminal, Code, AlertCircle, ShieldCheck, Fingerprint } from 'lucide-react';
+import EventCalendar from '../Components/EventCalendar';
 
 // --- Helper Sub-Components (Defined first to avoid ReferenceErrors) ---
 
@@ -133,6 +134,7 @@ const Dashboard = () => {
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
                     <div className="lg:col-span-8 space-y-10">
                         <HeatmapSection level={student.level} />
+                        <EventCalendar />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {student.courses?.map((course, index) => (
                                 <CourseCard 

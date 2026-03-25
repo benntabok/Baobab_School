@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AnimatedPage from '../Components/AnimatedPage.jsx'; 
+import AnimatedPage from '../Components/AnimatedPage.jsx';
 
 const Home = () => {
     // For testing, we point to a specific student ID from your students.js
-    const demoStudentId = "amos-01"; 
+    const demoStudentId = "amos-01";
 
     return (
         <AnimatedPage>
             <div className="bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-300 min-h-screen font-sans">
-                
+
                 {/* Hero Header */}
                 <header className="max-w-6xl mx-auto px-8 lg:px-20 py-24">
                     <div className="max-w-3xl">
@@ -32,6 +32,8 @@ const Home = () => {
                 </header>
 
                 {/* Progress Bar Mission Card */}
+
+                
                 <section className="max-w-6xl mx-auto px-8 lg:px-20 -mt-10 relative z-10">
                     <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex items-center space-x-4">
@@ -64,24 +66,26 @@ const Home = () => {
                     <div className="max-w-7xl mx-auto">
                         <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mb-16">Academic Departments</h3>
                         <div className="grid md:grid-cols-3 gap-8">
-                            <DepartmentCard 
-                                title="Front-End Architecture" 
-                                desc="Designing performant, user-centric visual systems for the modern web." 
-                                accent="bg-[#701c1c]" 
+                            <DepartmentCard
+                                title="Front-End Architecture"
+                                desc="Designing performant, user-centric visual systems for the modern web."
+                                accent="bg-[#701c1c]"
                             />
-                            <DepartmentCard 
-                                title="Systems Programming" 
-                                desc="Mastering memory management and hardware logic via ANSI C." 
-                                accent="bg-black dark:bg-white" 
+                            <DepartmentCard
+                                title="Systems Programming"
+                                desc="Mastering memory management and hardware logic via ANSI C."
+                                accent="bg-black dark:bg-white"
                             />
-                            <DepartmentCard 
-                                title="Applied Scripting" 
-                                desc="Automating complex workflows with Python and Unix Bash." 
-                                accent="bg-gray-300 dark:bg-slate-600" 
+                            <DepartmentCard
+                                title="Applied Scripting"
+                                desc="Automating complex workflows with Python and Unix Bash."
+                                accent="bg-gray-300 dark:bg-slate-600"
                             />
                         </div>
                     </div>
                 </section>
+
+                
 
                 {/* Footer */}
                 <footer className="bg-gray-50 dark:bg-slate-950 border-t border-gray-200 dark:border-slate-800 pt-20 pb-10 px-8 lg:px-20">

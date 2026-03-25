@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar as CalendarIcon, MapPin, Clock, ChevronRight } from 'lucide-react';
-import { events } from '../../Data/events';
+import { events } from '../Data/events';
 
 const EventCalendar = () => {
   return (

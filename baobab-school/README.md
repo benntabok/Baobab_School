@@ -1,16 +1,103 @@
-# React + Vite
+ Gemini said
+A README for the Baobab School of Computing needs to strike a balance between a professional technical project and an inviting educational platform. Since you’re building this in React with a focus on Systems Engineering and IoT, the README should reflect that "low-level" rigor.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Here is a structured template you can copy and adapt for your GitHub repository.
 
-Currently, two official plugins are available:
+🌳 Baobab School of Computing
+Baobab School of Computing is a hybrid innovation hub and digital learning platform designed to bridge the gap between high-level software development and low-level systems engineering. Rooted in Ngong, Kenya, we empower the next generation of engineers to build for the "Silicon Savannah" through hands-on IoT, C programming, and hardware-software integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Explore the Platform | 📖 Course Catalog | 🛠 Tech Stack
 
-## React Compiler
+✨ Features
+Systems-First Curriculum: Deep dives into C, memory management, and embedded systems.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+IoT Sandbox: Integrated hardware labs for ESP32 and Raspberry Pi prototyping.
 
-## Expanding the ESLint configuration
+Automated Enrollment: Seamless M-Pesa integration with instant course access.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+KRA eTIMS Ready: Automated tax-compliant invoicing for every transaction.
+
+Project-Based Learning: Every module culminates in a real-world "Maker" project.
+
+🛠 Tech Stack
+Frontend
+Framework: React (Vite-powered)
+
+Styling: Tailwind CSS
+
+State Management: Context API / Hooks
+
+Icons: Lucide React / FontAwesome
+
+Backend (Infrastructure)
+Environment: Node.js / Express
+
+Payments: Safaricom Daraja 3.0 API (M-Pesa Express)
+
+Tax Compliance: eTIMS OSCU API Integration
+
+Deployment: Cloudflare Pages (Frontend)
+
+🚀 Getting Started
+Prerequisites
+Node.js (v18.0 or higher)
+
+npm or yarn
+
+Safaricom Developer Account (for M-Pesa testing)
+
+Installation
+Clone the repository
+
+Bash
+git clone https://github.com/YourUsername/baobab-school-app.git
+cd baobab-school-app
+Install dependencies
+
+Bash
+npm install
+Set up Environment Variables
+Create a .env file in the root directory:
+
+Code snippet
+VITE_MPESA_SHORTCODE=your_shortcode
+VITE_API_BASE_URL=https://api.baobab.school
+Run the development server
+
+Bash
+npm run dev
+📂 Project Structure
+Plaintext
+src/
+├── assets/          # Images, logos, and global styles
+├── components/      # Reusable UI components (Buttons, Cards, Nav)
+├── features/        # Domain-specific logic (Enrollment, Classroom, Payments)
+├── hooks/           # Custom React hooks
+├── pages/           # Main route components (Home, Dashboard, Lab)
+└── utils/           # Helper functions (Currency formatting, Date parsers)
+🤝 Contributing
+We are an open-learning community. If you'd like to contribute to the curriculum or the platform's infrastructure:
+
+Fork the Project.
+
+Create your Feature Branch (git checkout -b feature/AmazingFeature).
+
+Commit your Changes (git commit -m 'feat: Add some AmazingFeature').
+
+Push to the Branch (git push origin feature/AmazingFeature).
+
+Open a Pull Request.
+
+📜 License
+Distributed under the MIT License. See LICENSE for more information.
+
+📬 Contact
+Amos Omari - Founder & Lead Instructor
+
+Location: Ngong, Kajiado North, Kenya
+
+Website: baobab-91y.pages.dev
+
+Twitter: @BaobabComputing
+
+“Building the roots of African Engineering, one byte at a time.”

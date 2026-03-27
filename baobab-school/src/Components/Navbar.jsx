@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import useAuthStore from '../Store/useAuthStore'; // Corrected Case: Ensure path matches Store/useAuthStore
-import { LogOut, Sun, Moon } from 'lucide-react';
+import useAuthStore from '../Store/useAuthStore'; 
+import { LogOut, Sun, Moon, Activity } from 'lucide-react';
 
 const Navbar = () => {
-    // 1. Pull everything from the global store
     const { user, logout, isAuthenticated, theme, toggleTheme } = useAuthStore((state) => state);
+    
+    // System Status Logic
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+    useEffect(() => {
+        const handleStatus = () => setIsOnline(navigator.onLine);
+        window.addEventListener('online', handleStatus);
+        window.addEventListener('offline', handleStatus);
+        return () => {
+            window.removeEventListener('online', handleStatus);
+            window.removeEventListener('offline', handleStatus);
+        };
+    }, []);
 
     // If not logged in, show simplified branding
     if (!isAuthenticated) {
@@ -39,12 +51,22 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center space-x-6 md:space-x-8">
+                {/* Main Links */}
                 <div className="hidden md:flex space-x-6 text-[11px] font-bold uppercase tracking-widest text-gray-600 dark:text-slate-300">
                     <Link to="/" className="hover:text-[#701c1c] dark:hover:text-[#ff4d4d] transition">Campus</Link>
                     <Link to="/lab" className="hover:text-[#701c1c] dark:hover:text-[#ff4d4d] transition">The Lab</Link>
                 </div>
 
-                {/* Profile Section - Linked to current user node */}
+                {/* --- SYSTEM STATUS INDICATOR --- */}
+                <div className="hidden lg:flex items-center space-x-2 px-4 border-l border-gray-100 dark:border-slate-800">
+                    <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse' : 'bg-red-500'}`} />
+                    <span className="text-[9px] font-mono font-bold tracking-tighter text-gray-400 uppercase">
+                        {isOnline ? 'Systems Live' : 'Link Severed'}
+                    </span>
+                </div>
+                {/* ------------------------------- */}
+
+                {/* Profile Section */}
                 <Link to={`/dashboard/${user?.id}`} className="flex items-center space-x-3 group cursor-pointer">
                     <div className="text-right hidden sm:block">
                         <p className="text-[9px] font-black uppercase tracking-tighter leading-none dark:text-white">
@@ -69,6 +91,14 @@ const Navbar = () => {
                     </button>
                 </div>
             </div>
+            
+            {/* Tailwind extra pulse logic for the custom shadow if needed */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
+                }
+            `}} />
         </nav>
     );
 };

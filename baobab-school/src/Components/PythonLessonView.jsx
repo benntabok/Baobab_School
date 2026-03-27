@@ -77,7 +77,7 @@ const PythonLessonView = () => {
           <p><span className="text-blue-400">name</span> = <span className="text-yellow-200">"Student"</span></p>
           <p><span className="text-purple-400">print</span>(f<span className="text-yellow-200">"Welcome to Baobab, {"{name}"}!"</span>)</p>
         </div>
-        <button 
+        <button
           onClick={() => setProgress(100)}
           className="mt-4 bg-green-600 px-6 py-2 rounded font-bold hover:bg-green-700"
         >

@@ -21,3 +21,23 @@ body {
     background-color: #020617; /* Matches slate-950 */
   }
 }
+
+/* The Grain Overlay */
+.baobab-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.04; /* Very subtle - increase to 0.07 for a "rougher" look */
+  pointer-events: none; /* Allows clicks to pass through to buttons */
+  z-index: 1; /* Sits just above the background */
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  /* Or use a high-performance SVG filter if you prefer no external images */
+}
+
+/* Ensure your main content stays above the grain if needed */
+main, nav {
+  position: relative;
+  z-index: 2;
+}

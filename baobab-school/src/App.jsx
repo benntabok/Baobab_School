@@ -6,6 +6,7 @@ import Home from './Pages/Home';
 import Dashboard from './Pages/Dashboard';
 import Lab from './Pages/Lab';
 import Login from './Pages/Login'; // You'll create this next
+import CoursePageWrapper from './Pages/CoursePageWrapper';
 
 // Components
 import Navbar from './Components/Navbar';
@@ -42,9 +43,12 @@ function App() {
             } 
           />
 
+          <Route path="/course/:courseId" element={<CoursePageWrapper />} />
+
           {/* Fallbacks & Redirects */}
           <Route path="/dashboard" element={<Navigate to="/dashboard/amos-01" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          
         </Routes>
       </AnimatePresence>
     </>

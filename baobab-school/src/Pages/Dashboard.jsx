@@ -5,9 +5,9 @@ import useAuthStore from '../Store/useAuthStore';
 import AnimatedPage from '../Components/AnimatedPage';
 import { LayoutGrid, Activity, Terminal, Code, AlertCircle, ShieldCheck, Fingerprint } from 'lucide-react';
 import EventCalendar from '../Components/EventCalendar';
+import { syncCourseToCalendar } from '../utils/calendarHelper';
 
-// --- Helper Sub-Components (Defined first to avoid ReferenceErrors) ---
-
+// --- Helper Sub-Components ---
 const StatMini = ({ label, value }) => (
     <div className="text-right border-l-2 border-slate-200 dark:border-slate-800 pl-6">
         <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{label}</p>
@@ -44,27 +44,19 @@ const HeatmapSection = ({ level }) => (
     <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
             <h3 className="flex items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
-                <Activity className="w-4 h-4 mr-3 text-[#701c1c]" /> 
+                <Activity className="w-4 h-4 mr-3 text-[#701c1c]" />
                 Neural Commitment Heatmap
             </h3>
-            <div className="flex gap-1 text-[8px] font-bold text-slate-400 uppercase">
-                <span>Less</span>
-                <div className="w-2 h-2 bg-slate-100 dark:bg-slate-800 rounded-sm"></div>
-                <div className="w-2 h-2 bg-[#701c1c]/40 rounded-sm"></div>
-                <div className="w-2 h-2 bg-[#701c1c] rounded-sm"></div>
-                <span>More</span>
-            </div>
         </div>
         <div className="flex flex-wrap gap-1.5 md:gap-2">
             {[...Array(84)].map((_, i) => {
                 const isActive = (i + (level * 2)) % 7 === 0;
                 const isMid = i % 11 === 0;
                 return (
-                    <div 
-                        key={i} 
-                        className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-[3px] transition-all hover:scale-125 cursor-help ${
-                            isActive ? 'bg-[#701c1c]' : isMid ? 'bg-[#701c1c]/40' : 'bg-slate-100 dark:bg-slate-800'
-                        }`}
+                    <div
+                        key={i}
+                        className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-[3px] transition-all hover:scale-125 cursor-help ${isActive ? 'bg-[#701c1c]' : isMid ? 'bg-[#701c1c]/40' : 'bg-slate-100 dark:bg-slate-800'
+                            }`}
                     />
                 );
             })}
@@ -80,16 +72,32 @@ const NotFoundState = ({ id }) => (
     </div>
 );
 
-// --- Main Dashboard Component ---
-
 const Dashboard = () => {
     const { id } = useParams();
     const authUser = useAuthStore((state) => state.user);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-    const student = useMemo(() => 
-        students.find(s => String(s.id) === String(id)), 
-    [id]);
+    const student = useMemo(() =>
+        students.find(s => String(s.id) === String(id)),
+        [id]);
+
+    console.log("URL ID:", id, "Auth User ID:", authUser?.id, "Student Found:", student);
+
+    // --- CALENDAR INTEGRATION ---
+    const calendarEvents = useMemo(() => {
+        // Check if student exists and has a courses array
+        if (!student || !student.courses || !Array.isArray(student.courses)) {
+            console.warn("Baobab Warning: No courses found for this node.");
+            return [];
+        }
+
+        try {
+            return syncCourseToCalendar(student.courses);
+        } catch (error) {
+            console.error("Calendar Sync Failure:", error);
+            return [];
+        }
+    }, [student]);
 
     if (!isAuthenticated) return <Navigate to="/login" replace />;
     if (!student) return <NotFoundState id={id} />;
@@ -99,7 +107,7 @@ const Dashboard = () => {
     return (
         <AnimatedPage>
             <div className="bg-slate-50 dark:bg-slate-950 min-h-screen w-full p-6 lg:px-20 py-8 text-slate-900 dark:text-slate-100">
-                
+
                 {/* Security Header */}
                 <div className="max-w-7xl mx-auto mb-8 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
                     <div className="flex items-center gap-3">
@@ -109,9 +117,6 @@ const Dashboard = () => {
                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">
                             {isOwner ? 'Verified Personnel Access' : 'Classified Registry View'}
                         </span>
-                    </div>
-                    <div className="text-[9px] font-mono text-slate-400 bg-slate-100 dark:bg-slate-900 px-3 py-1 rounded-full uppercase">
-                        Node: {authUser?.id || 'Unknown'} // Session: Active
                     </div>
                 </div>
 
@@ -123,7 +128,7 @@ const Dashboard = () => {
                         <h1 className="text-4xl md:text-5xl font-serif font-black tracking-tight">{student.name}</h1>
                         <p className="text-slate-500 text-sm mt-2 font-medium">Registry ID: {student.id}</p>
                     </div>
-                    
+
                     <div className="flex items-center gap-8 bg-white dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
                         <StatMini label="Level" value={student.level} />
                         <StatMini label="Rank" value={student.rank || 'N/A'} />
@@ -134,14 +139,17 @@ const Dashboard = () => {
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
                     <div className="lg:col-span-8 space-y-10">
                         <HeatmapSection level={student.level} />
-                        <EventCalendar />
+
+                        {/* Integrated Calendar Component */}
+                        <EventCalendar events={calendarEvents} />
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {student.courses?.map((course, index) => (
-                                <CourseCard 
+                                <CourseCard
                                     key={index}
-                                    title={course.name} 
-                                    progress={course.progress} 
-                                    icon={course.type === 'sys' ? <Terminal size={18}/> : <Code size={18}/>} 
+                                    title={course.name}
+                                    progress={course.progress}
+                                    icon={course.type === 'sys' ? <Terminal size={18} /> : <Code size={18} />}
                                     status={course.progress === 100 ? "Verified" : "Syncing"}
                                 />
                             ))}

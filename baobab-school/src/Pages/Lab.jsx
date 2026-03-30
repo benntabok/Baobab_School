@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import useAuthStore from '../Store/useAuthStore';
-import { Play, RotateCcw, Terminal, Eye, Clock } from 'lucide-react'; 
+import { Play, RotateCcw, Terminal, Eye, Clock } from 'lucide-react';
 
 const Lab = () => {
-    const { theme, user, updateLevel } = useAuthStore();
+    const { theme, user } = useAuthStore();
     const [language, setLanguage] = useState('python');
     const [code, setCode] = useState('# Initialize Baobab System...\nprint("Hello World")');
     const [output, setOutput] = useState('System ready. Waiting for input...');
     const [isRunning, setIsRunning] = useState(false);
     const [view, setView] = useState('terminal');
-    
-    // --- NEW STATE: SYSTEM CLOCK ---
     const [currentTime, setCurrentTime] = useState('');
 
     const iframeRef = useRef(null);
@@ -38,19 +36,12 @@ const Lab = () => {
             setCurrentTime(new Intl.DateTimeFormat('en-GB', options).format(now));
         };
 
-        updateClock(); // Initial call
+        updateClock();
         const timer = setInterval(updateClock, 1000);
         return () => clearInterval(timer);
     }, []);
 
-    // --- EFFECT: SYNC THEME ---
-    useEffect(() => {
-        const root = window.document.documentElement;
-        if (theme === 'dark') root.classList.add('dark');
-        else root.classList.remove('dark');
-    }, [theme]);
-
-    // --- EFFECT: PERSISTENCE (Local Storage) ---
+    // --- EFFECT: PERSISTENCE ---
     useEffect(() => {
         const savedCode = localStorage.getItem(`baobab_save_${language}`);
         if (savedCode) setCode(savedCode);
@@ -68,7 +59,7 @@ const Lab = () => {
 
     const executeCode = async () => {
         setIsRunning(true);
-        setOutput('📡 Routing request to Lab Node...');
+        setOutput('📡 Routing request to Judge0 Node...');
 
         if (language === 'html' || language === 'javascript') {
             setView('preview');
@@ -78,34 +69,44 @@ const Lab = () => {
             setIsRunning(false);
         } else {
             setView('terminal');
+
+            // Judge0 Language IDs: 71=Python(3.8), 52=C(GCC 9.2), 46=Bash
+            const languageMap = {
+                'python': 71,
+                'c': 52,
+                'bash': 46
+            };
+
             try {
-                const res = await fetch('https://emkc.org/api/v2/piston/execute', {
+                const res = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'omit',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-RapidAPI-Key': '99e8291e04mshbc448d783da9ef5p182f62jsn6896d8270fa2',
+                        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
+                    },
                     body: JSON.stringify({
-                        language: language,
-                        version: '*',
-                        files: [{ content: code }],
+                        source_code: code,
+                        language_id: languageMap[language] || 71,
+                        stdin: ""
                     }),
                 });
 
-                if (res.status === 401) {
-                    setOutput('❌ ERR: Unauthorized (401). Piston API rejected the handshake.');
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    setOutput(`❌ ERR: Judge0 Rejected Handshake (${res.status})\n${errData.message || ''}`);
                     return;
                 }
 
                 const data = await res.json();
-                if (data.run) {
-                    setOutput(data.run.output || '✓ Process exited with code 0.');
-                } else {
-                    setOutput('⚠️ System Error: Lab Node returned an invalid response.');
-                }
+
+                // Judge0 Logic: Check for stdout, then stderr, then compile_output
+                const finalOutput = data.stdout || data.stderr || data.compile_output || '✓ Process exited with code 0 (No output).';
+                setOutput(finalOutput);
 
             } catch (err) {
                 console.error("Lab Error:", err);
-                setOutput('❌ ERR: Execution Link Severed. Check Hub connectivity.');
+                setOutput('❌ ERR: Judge0 Link Severed. Check RapidAPI subscription.');
             } finally {
                 setIsRunning(false);
             }
@@ -114,7 +115,6 @@ const Lab = () => {
 
     return (
         <div className="flex flex-col h-screen bg-white dark:bg-slate-950 transition-colors duration-500 font-sans overflow-hidden">
-
             <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-[0.05]"
                 style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/stardust.png')` }} />
 
@@ -183,7 +183,7 @@ const Lab = () => {
 
                     <div className="flex-1 p-6 overflow-auto">
                         {view === 'terminal' ? (
-                            <pre className="font-mono text-xs text-slate-700 dark:text-green-500 whitespace-pre-wrap leading-relaxed">
+                            <pre className="font-mono text-xs text-slate-700 dark:text-green-500 whitespace-pre-wrap leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-500">
                                 {`$ baobab_exec --${language}\n\n${output}`}
                             </pre>
                         ) : (
@@ -197,7 +197,7 @@ const Lab = () => {
                 </div>
             </div>
 
-            {/* THE "WATERMARK MASK" / STATUS FOOTER */}
+            {/* STATUS FOOTER */}
             <footer className="relative z-50 h-8 bg-black border-t border-slate-800 flex items-center justify-between px-6 font-mono text-[9px] text-slate-500">
                 <div className="flex items-center gap-4">
                     <span className="flex items-center gap-2 text-green-600 animate-pulse">

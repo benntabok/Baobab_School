@@ -51,3 +51,16 @@ export const runUniversalLinter = (userCode, language) => {
 
   return results;
 };
+
+// src/utils/linter.js
+const LANGUAGE_RULES = {
+  // ... existing C, Python, Bash rules
+  powershell: {
+    required: [/Get-\w+/, /Select-Object/, /\$_\./],
+    forbidden: [/format-table/], // Forbidden because it kills the object pipeline
+    messages: {
+      missing_pipeline: "Logic Error: You aren't passing the Object through the pipe (|).",
+      forbidden_format: "Optimization Error: Don't use Format-Table until the very end of your script!"
+    }
+  }
+};

@@ -1,0 +1,9 @@
+# Node
+node_modules/
+dist/
+.env
+
+#C
+*.o
+server_bin
+.vscode/

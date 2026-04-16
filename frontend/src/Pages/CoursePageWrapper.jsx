@@ -1,7 +1,7 @@
 // src/Pages/CoursePageWrapper.jsx
 import { useParams } from 'react-router-dom';
 import { CURRICULUM } from '../Data/curriculum';
-import CoursePage from './CoursePage';
+import CoursePage from '../Components/CoursePage';
 
 const CoursePageWrapper = () => {
     const { courseId } = useParams();

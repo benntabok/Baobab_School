@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AnimatedPage from '../Components/AnimatedPage.jsx';
-import useAuthStore from '../Store/useAuthStore'; 
+import useAuthStore from '../Store/useAuthStore.js'; 
 
 const Home = () => {
     const { theme } = useAuthStore((state) => state);

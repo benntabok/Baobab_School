@@ -1,5 +1,5 @@
 // src/Data/curriculum.js
-import editorsContent from '../Assets/Courses/editors.md?raw'; 
+import editorsContent from '../Assets/Courses/editors.md'; 
 
 export const CURRICULUM = {
     'operator-toolkit': {
